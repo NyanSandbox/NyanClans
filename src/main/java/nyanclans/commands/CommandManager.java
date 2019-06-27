@@ -55,7 +55,7 @@ public abstract class CommandManager implements CommandExecutor {
                 else if (!sub.onCommand(sender, subArgs))
                     sendUsage(sub.getName(), sender);
 
-                break;
+                return true;
             }
         }
 
