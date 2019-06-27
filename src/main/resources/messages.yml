@@ -1,0 +1,11 @@
+clan:
+  help-not-member:
+    - '&e/c accept &6[&cclan&6] &f— accept invite to clan'
+    - '&e/c create &6«&cname&6» &f— create new clan'
+    - '&e/c top &f— show top clans'
+  help-member:
+    delete: '&e/c delete &f— disband clan'
+  help-default:
+    - '&e/c leave &f— leave clan'
+    - '&e/c top &f— show top clans'
+

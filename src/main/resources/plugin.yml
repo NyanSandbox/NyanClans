@@ -1,0 +1,18 @@
+name: NyanClans
+version: ${project.version}
+main: nyanclans.NyanClansPlugin
+author: NyanGuyMF
+description: 'The NyanClans plugin is fully customisable Bukkit plugin with database storage for clans and players.'
+depend: [ProtocolLib]
+softdepend: [Vault]
+load: POSTWORLD
+
+commands:
+  clandev:
+    description: 'Developer command'
+  clan:
+    aliases: ['c']
+    description: 'Main clans command'
+  clanchat:
+    aliases: ['cc']
+    description: 'Sends message to clan chat'
