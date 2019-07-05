@@ -78,7 +78,7 @@ public final class MessagesConfig {
         if (messages == null)
             return messages;
 
-        // It can be optimized on the future
+        // It can be optimized in the future
         messages = messages.parallelStream().map(str -> {
             for (String placeholder : placeholders.keySet())
                 str = str.replace(placeholder, placeholders.get(placeholder));
