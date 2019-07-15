@@ -40,8 +40,10 @@ public abstract class CommandManager implements CommandExecutor {
         final CommandSender sender, final Command command,
         final String label, final String[] args
     ) {
-        if (args.length == 0)
+        if (args.length == 0) {
             sendUsage(getName(), sender);
+            return true;
+        }
 
         String subAlias = args[0];
         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
@@ -53,7 +55,7 @@ public abstract class CommandManager implements CommandExecutor {
                 else if (!sub.onCommand(sender, subArgs))
                     sendUsage(sub.getName(), sender);
 
-                break;
+                return true;
             }
         }
 
