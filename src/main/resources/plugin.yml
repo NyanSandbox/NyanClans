@@ -3,8 +3,7 @@ version: ${project.version}
 main: nyanclans.NyanClansPlugin
 author: NyanGuyMF
 description: 'The NyanClans plugin is fully customisable Bukkit plugin with database storage for clans and players.'
-depend: [ProtocolLib]
-softdepend: [Vault]
+softdepend: [ProtocolLib, Vault]
 load: POSTWORLD
 
 commands:

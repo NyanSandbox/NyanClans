@@ -30,41 +30,13 @@ import nyanclans.commands.clan.ClanCommand;
 import nyanclans.config.MessagesConfig;
 import nyanclans.db.ConnectionCallback;
 import nyanclans.db.DatabaseManager;
+import nyanclans.event.PlayerJoinEventListener;
 
 /** @author NyanGuyMF - Vasiliy Bely */
 public final class NyanClansPlugin extends JavaPlugin {
     protected static Dao<ClanPlayer, String> playerDao;
     protected static Dao<Clan, String> clanDao;
     protected static Dao<Rank, Integer> rankDao;
-    private static ConnectionCallback callback = conn -> {
-        try {
-            NyanClansPlugin.playerDao = createDao(conn, ClanPlayer.class);
-            if (!NyanClansPlugin.playerDao.isTableExists())
-                TableUtils.createTable(NyanClansPlugin.playerDao);
-        } catch (SQLException ex) {
-            System.err.printf(
-                "Unable to create ClanPlayer dao: %s\n", ex.getLocalizedMessage()
-            );
-        }
-        try {
-            NyanClansPlugin.clanDao = createDao(conn, Clan.class);
-            if (!NyanClansPlugin.clanDao.isTableExists())
-                TableUtils.createTable(NyanClansPlugin.clanDao);
-        } catch (SQLException ex) {
-            System.err.printf(
-                "Unable to create Clan dao: %s\n", ex.getLocalizedMessage()
-            );
-        }
-        try {
-            NyanClansPlugin.rankDao = createDao(conn, Rank.class);
-            if (!NyanClansPlugin.rankDao.isTableExists())
-                TableUtils.createTable(NyanClansPlugin.rankDao);
-        } catch (SQLException ex) {
-            System.err.printf(
-                "Unable to create Rank dao: %s\n", ex.getLocalizedMessage()
-            );
-        }
-    };
     private static DatabaseManager databaseManager;
     private MessagesConfig messagesConfig;
 
@@ -73,7 +45,7 @@ public final class NyanClansPlugin extends JavaPlugin {
 
         databaseManager = new DatabaseManager(getDataFolder());
 
-        if (!databaseManager.connect(NyanClansPlugin.callback)) {
+        if (!databaseManager.connect(onDatabaseConnection())) {
             System.err.println("Unable to connect to database.");
             System.out.println("Plugin will be disabled.");
         }
@@ -90,6 +62,7 @@ public final class NyanClansPlugin extends JavaPlugin {
         }
 
         new ClanCommand(messagesConfig).register(this);
+        new PlayerJoinEventListener(this).register();
     }
 
     @Override public void onDisable() {
@@ -97,7 +70,39 @@ public final class NyanClansPlugin extends JavaPlugin {
     }
 
     protected static boolean reconnect() {
-        return databaseManager.reconnect(NyanClansPlugin.callback);
+        return databaseManager.reconnect(onDatabaseConnection());
+    }
+
+    private static ConnectionCallback onDatabaseConnection() {
+        return conn -> {
+            try {
+                NyanClansPlugin.playerDao = createDao(conn, ClanPlayer.class);
+                if (!NyanClansPlugin.playerDao.isTableExists())
+                    TableUtils.createTable(NyanClansPlugin.playerDao);
+            } catch (SQLException ex) {
+                System.err.printf(
+                    "Unable to create ClanPlayer dao: %s\n", ex.getLocalizedMessage()
+                );
+            }
+            try {
+                NyanClansPlugin.clanDao = createDao(conn, Clan.class);
+                if (!NyanClansPlugin.clanDao.isTableExists())
+                    TableUtils.createTable(NyanClansPlugin.clanDao);
+            } catch (SQLException ex) {
+                System.err.printf(
+                    "Unable to create Clan dao: %s\n", ex.getLocalizedMessage()
+                );
+            }
+            try {
+                NyanClansPlugin.rankDao = createDao(conn, Rank.class);
+                if (!NyanClansPlugin.rankDao.isTableExists())
+                    TableUtils.createTable(NyanClansPlugin.rankDao);
+            } catch (SQLException ex) {
+                System.err.printf(
+                    "Unable to create Rank dao: %s\n", ex.getLocalizedMessage()
+                );
+            }
+        };
     }
 
     private void initializeFolder(final File dataFolder) {
