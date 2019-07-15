@@ -17,6 +17,7 @@
 package nyanclans;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public final class Rank {
     private Clan owner;
 
     @DatabaseField(dataType=DataType.SERIALIZABLE)
-    private List<String> permissions;
+    private ArrayList<String> permissions;
 
     public static Rank getLeaderRank(final Clan clan) {
         Rank rank = new Rank();
@@ -55,7 +56,8 @@ public final class Rank {
         rank.tag = "leader";
         rank.owner = clan;
         rank.displayName = "&6Leader";
-        rank.permissions = Arrays.asList("all");
+        rank.permissions = new ArrayList<>();
+        rank.permissions.add("all");
 
         return rank;
     }
@@ -66,7 +68,10 @@ public final class Rank {
         rank.tag = "player";
         rank.owner = clan;
         rank.displayName = "&7Player";
-        rank.permissions = Arrays.asList("home", "pay", "chat");
+        rank.permissions = new ArrayList<>();
+        rank.permissions.add("home");
+        rank.permissions.add("pay");
+        rank.permissions.add("chat");
 
         return rank;
     }
