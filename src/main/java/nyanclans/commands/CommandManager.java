@@ -83,6 +83,6 @@ public abstract class CommandManager implements CommandExecutor {
     }
 
     protected void addSubCommand(final SubCommand subCommand) {
-
+        subCommands.add(subCommand);
     }
 }
