@@ -99,7 +99,7 @@ public final class Clan {
 
     public List<ClanPlayer> getMembers() {
         Map<String, Object> fields = ImmutableMap.<String, Object>builder()
-            .put("clan", this)
+            .put("clan_id", this)
             .build();
 
         try {
@@ -111,5 +111,13 @@ public final class Clan {
             }
             return getMembers();
         }
+    }
+    
+    public boolean addMember(ClanPlayer newMember) {
+        if (newMember.isClanMember())
+            return false;
+
+        newMember.setClan(this);
+        return true;
     }
 }
