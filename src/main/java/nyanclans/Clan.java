@@ -18,9 +18,12 @@ package nyanclans;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Table;
 
+import com.google.common.collect.ImmutableMap;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 
@@ -40,9 +43,6 @@ public final class Clan {
     @DatabaseField(foreign=true, foreignAutoCreate=false)
     private ClanPlayer leader;
 
-    @ForeignCollectionField(foreignFieldName="clan")
-    private Collection<ClanPlayer> players;
-
     @ForeignCollectionField(foreignFieldName="owner")
     private Collection<Rank> ranks;
 
@@ -53,8 +53,8 @@ public final class Clan {
             if (!NyanClansPlugin.reconnect()) {
                 ex.printStackTrace();
                 return null;
-            } else
-                return find(clanName);
+            }
+            return find(clanName);
         }
     }
 
@@ -66,8 +66,8 @@ public final class Clan {
             if (!NyanClansPlugin.reconnect()) {
                 ex.printStackTrace();
                 return false;
-            } else
-                return save();
+            }
+            return save();
         }
     }
 
@@ -79,8 +79,8 @@ public final class Clan {
             if (!NyanClansPlugin.reconnect()) {
                 ex.printStackTrace();
                 return false;
-            } else
-                return create();
+            }
+            return create();
         }
     }
 
@@ -92,8 +92,24 @@ public final class Clan {
             if (!NyanClansPlugin.reconnect()) {
                 ex.printStackTrace();
                 return false;
-            } else
-                return delete();
+            }
+            return delete();
+        }
+    }
+
+    public List<ClanPlayer> getMembers() {
+        Map<String, Object> fields = ImmutableMap.<String, Object>builder()
+            .put("clan", this)
+            .build();
+
+        try {
+            return NyanClansPlugin.playerDao.queryForFieldValues(fields);
+        } catch (SQLException ex) {
+            if (!NyanClansPlugin.reconnect()) {
+                ex.printStackTrace();
+                return null;
+            }
+            return getMembers();
         }
     }
 }
