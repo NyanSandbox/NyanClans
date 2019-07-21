@@ -28,8 +28,10 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import nyanclans.commands.CommandMessages;
+
 /** @author NyanGuyMF - Vasiliy Bely */
-public final class MessagesConfig {
+public final class MessagesConfig implements CommandMessages {
     private File messagesFile;
     private YamlConfiguration config;
 
@@ -97,5 +99,17 @@ public final class MessagesConfig {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override public String getNoPermission(final String cmdName) {
+        return get("no-permission", cmdName);
+    }
+
+    @Override public String getUsage(final String cmdName) {
+        return get("cmd-usage", cmdName);
+    }
+
+    @Override public String getNotFoundMessage(final String cmdName) {
+        return get("cmd-not-found", cmdName);
     }
 }

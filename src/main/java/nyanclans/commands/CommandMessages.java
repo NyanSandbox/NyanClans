@@ -14,21 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with NyanClans. If not, see <https://www.gnu.org/licenses/>.
  */
-package nyanclans.commands.clan;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
-import nyanclans.commands.CommandManager;
-import nyanclans.config.MessagesConfig;
+package nyanclans.commands;
 
 /** @author NyanGuyMF - Vasiliy Bely */
-public final class ClanCommand extends CommandManager {
-    public ClanCommand(final MessagesConfig messagesConfig) {
-        super("clan", messagesConfig);
-        super.addSubCommand(new ClanHelpCommand(messagesConfig));
-    }
+public interface CommandMessages {
+    String getNoPermission(String commandName);
 
-    public void register(final JavaPlugin plugin) {
-        plugin.getCommand(getName()).setExecutor(this);
-    }
+    String getUsage(String commandName);
+
+    String getNotFoundMessage(String commandName);
 }

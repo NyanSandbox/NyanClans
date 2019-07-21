@@ -29,19 +29,20 @@ import lombok.Getter;
 /** @author NyanGuyMF - Vasiliy Bely */
 public abstract class CommandManager implements CommandExecutor {
     @Getter private String name;
+    private CommandMessages messages;
     private List<SubCommand> subCommands;
 
-    public CommandManager(final String name) {
+    public CommandManager(final String name, final CommandMessages messages) {
         this.name = name;
+        this.messages = messages;
         subCommands = new ArrayList<>();
     }
-
     @Override public boolean onCommand(
         final CommandSender sender, final Command command,
         final String label, final String[] args
     ) {
         if (args.length == 0) {
-            sendUsage(getName(), sender);
+            sender.sendMessage(messages.getUsage(getName()));
             return true;
         }
 
@@ -50,36 +51,23 @@ public abstract class CommandManager implements CommandExecutor {
 
         for (SubCommand sub : subCommands) {
             if (sub.getName().equalsIgnoreCase(subAlias)) {
-                if (!sub.hasPermission(sender))
-                    sendNoPermission(sub.getName(), sender);
-                else if (!sub.onCommand(sender, subArgs))
-                    sendUsage(sub.getName(), sender);
-
+                executeSubCommand(sender, sub, subArgs);
                 return true;
             }
         }
 
-        sendNotFound(subAlias, sender);
-
+        sender.sendMessage(messages.getNotFoundMessage(subAlias));
         return true;
     }
 
-    public void sendNotFound(final String command, final CommandSender sender) {
-        sender.sendMessage(String.format(
-            "&cSub command «&6%s&c» not found.", command
-        ).replace('&', '\u00a7'));
-    }
-
-    public void sendUsage(final String command, final CommandSender sender) {
-        sender.sendMessage(String.format(
-            "&cWrong usage of «&6%s&c» command.", command
-        ).replace('&', '\u00a7'));
-    }
-
-    public void sendNoPermission(final String command, final CommandSender sender) {
-        sender.sendMessage(String.format(
-            "&cYou have no permission to perform «&6%s&c» command.", command
-        ).replace('&', '\u00a7'));
+    private void executeSubCommand(
+        final CommandSender sender, final SubCommand sub,
+        final String[] args
+    ) {
+        if (!sub.hasPermission(sender))
+            sender.sendMessage(messages.getNoPermission(sub.getName()));
+        else if (!sub.onCommand(sender, args))
+            sender.sendMessage(messages.getUsage(sub.getName()));
     }
 
     protected void addSubCommand(final SubCommand subCommand) {
