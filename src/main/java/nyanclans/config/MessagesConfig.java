@@ -70,6 +70,15 @@ public final class MessagesConfig implements CommandMessages {
         return message.replace('&', '\u00a7').replace("\\n", "\n");
     }
 
+    public String get(final String path, final Map<String, String> placeholders) {
+        String message = config.getString(path);
+
+        for (String placeholder : placeholders.keySet())
+            message = message.replace(placeholder, placeholders.get(placeholder));
+
+        return message.replace('&', '\u00a7').replace("\\n", "\n");
+    }
+
     public List<String> getList(final String path) {
         return config.getStringList(path);
     }
