@@ -16,9 +16,10 @@
  */
 package nyanclans.config;
 
+import static java.nio.file.Files.copy;
+
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public final class MessagesConfig implements CommandMessages {
         if (!messagesFile.exists()) {
             // save yaml file with comments
             try {
-                Files.copy(plugin.getResource(messagesFile.getName()), messagesFile.toPath());
+                copy(plugin.getResource(messagesFile.getName()), messagesFile.toPath());
             } catch (IOException ex) {
                 System.err.printf(
                     "Unable to save %s file: %s\n", messagesFile.getName(),
