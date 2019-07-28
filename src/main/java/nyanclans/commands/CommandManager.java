@@ -24,12 +24,15 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 
 /** @author NyanGuyMF - Vasiliy Bely */
 public abstract class CommandManager implements CommandExecutor {
     @Getter private String name;
+    @Getter(value=AccessLevel.PROTECTED)
     private CommandMessages messages;
+    @Getter(value=AccessLevel.PROTECTED)
     private List<SubCommand> subCommands;
 
     public CommandManager(final String name, final CommandMessages messages) {
