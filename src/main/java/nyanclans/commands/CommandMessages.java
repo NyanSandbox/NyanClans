@@ -23,4 +23,6 @@ public interface CommandMessages {
     String getUsage(String commandName);
 
     String getNotFoundMessage(String commandName);
+
+    String getOnlyPlayerCommand(String commandName);
 }

@@ -25,4 +25,8 @@ public interface SubCommand {
     boolean hasPermission(CommandSender sender);
 
     String getName();
+
+    int getMinArgsLength();
+
+    boolean isPlayerRequired();
 }

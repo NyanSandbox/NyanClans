@@ -122,4 +122,8 @@ public final class MessagesConfig implements CommandMessages {
     @Override public String getNotFoundMessage(final String cmdName) {
         return get("cmd-not-found", cmdName);
     }
+
+    @Override public String getOnlyPlayerCommand(final String cmdName) {
+        return get("errors.only-player-command").replace("{command-name}", cmdName);
+    }
 }

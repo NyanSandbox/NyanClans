@@ -21,13 +21,17 @@ import org.bukkit.command.CommandSender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 
 /** @author NyanGuyMF - Vasiliy Bely */
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 public abstract class AbstractSubCommand implements SubCommand {
     private final String name;
+    private int minArgsLength = 0;
+    private boolean isPlayerRequired = false;
 
     @Override public boolean hasPermission(final CommandSender sender) {
         return true;

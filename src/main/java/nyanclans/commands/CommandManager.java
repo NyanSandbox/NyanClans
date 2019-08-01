@@ -23,6 +23,7 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -67,10 +68,25 @@ public abstract class CommandManager implements CommandExecutor {
         final CommandSender sender, final SubCommand sub,
         final String[] args
     ) {
-        if (!sub.hasPermission(sender))
+        if (!sub.hasPermission(sender)) {
             sender.sendMessage(messages.getNoPermission(sub.getName()));
-        else if (!sub.onCommand(sender, args))
+            return;
+        }
+
+        if (sub.isPlayerRequired() && (sender instanceof ConsoleCommandSender)) {
+            sender.sendMessage(messages.getOnlyPlayerCommand(sub.getName()));
+            return;
+        }
+
+        if (args.length < sub.getMinArgsLength()) {
             sender.sendMessage(messages.getUsage(sub.getName()));
+            return;
+        }
+
+        if (!sub.onCommand(sender, args)) {
+            sender.sendMessage(messages.getUsage(sub.getName()));
+            return;
+        }
     }
 
     protected void addSubCommand(final SubCommand subCommand) {
